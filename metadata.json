@@ -1,0 +1,6 @@
+{
+  "name": "Artify Solutions",
+  "description": "Artify Solutions is an AI-native software house engineering custom AI software, autonomous agents, enterprise automation, and intelligent platforms built around your business.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
