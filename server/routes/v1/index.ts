@@ -12,6 +12,7 @@ import leadRoutes from './leadRoutes';
 import { notificationRouter, auditRouter } from './notificationRoutes';
 import aiRoutes from './aiRoutes';
 import systemRoutes from './systemRoutes';
+import paymentRoutes from './paymentRoutes';
 
 const v1Router = Router();
 
@@ -22,6 +23,7 @@ v1Router.use('/products', productRoutes);
 v1Router.use('/services', productRoutes);
 v1Router.use('/subscriptions', subscriptionRouter);
 v1Router.use('/api-keys', apiKeyRouter);
+v1Router.use('/payments', paymentRoutes);
 v1Router.use('/leads', leadRoutes);
 v1Router.use('/notifications', notificationRouter);
 v1Router.use('/audit', auditRouter);

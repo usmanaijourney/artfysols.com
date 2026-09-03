@@ -31,6 +31,7 @@ import {
 import { useAuth } from '../context/AuthContext';
 import { AiProductItem } from '../types';
 import { AI_PRODUCTS } from '../data/aiProductsData';
+import { NavbarSearch } from './NavbarSearch';
 
 interface NavbarProps {
   onOpenSolutionBuilder: () => void;
@@ -424,6 +425,18 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Desktop Right Controls (>= 768px) */}
         <div className="hidden md:flex items-center gap-2 lg:gap-2.5">
+          {/* Universal AI Search Bar with ⌘K */}
+          <NavbarSearch
+            theme={theme}
+            onSelectProduct={handleProductSelect}
+            onNavigateToServices={onNavigateToServices}
+            onNavigateToBlog={onNavigateToBlog}
+            onNavigateToIndustries={onNavigateToIndustries}
+            onNavigateToAiSolutions={onNavigateToAiSolutions}
+            onOpenConsultant={onOpenConsultant}
+            onOpenSolutionBuilder={onOpenSolutionBuilder}
+          />
+
           {/* Theme Toggle */}
           <button
             onClick={onToggleTheme}
@@ -447,7 +460,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <button
             onClick={onOpenConsultant}
             id="nav-interactive-ai-btn"
-            className={`hidden lg:flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-lg border transition-all shadow-sm ${
+            className={`hidden xl:flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-lg border transition-all shadow-sm ${
               isLight
                 ? 'text-slate-700 hover:text-slate-950 bg-slate-100 hover:bg-slate-200 border-slate-200'
                 : 'text-zinc-300 hover:text-white bg-[#131318] hover:bg-[#1c1c24] border-white/[0.08]'
@@ -512,7 +525,20 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         {/* Mobile Header Controls (< 768px) */}
-        <div className="md:hidden flex items-center gap-2">
+        <div className="md:hidden flex items-center gap-1.5 sm:gap-2">
+          {/* Mobile Search Button */}
+          <NavbarSearch
+            theme={theme}
+            isMobileCompact={true}
+            onSelectProduct={handleProductSelect}
+            onNavigateToServices={onNavigateToServices}
+            onNavigateToBlog={onNavigateToBlog}
+            onNavigateToIndustries={onNavigateToIndustries}
+            onNavigateToAiSolutions={onNavigateToAiSolutions}
+            onOpenConsultant={onOpenConsultant}
+            onOpenSolutionBuilder={onOpenSolutionBuilder}
+          />
+
           {user ? (
             <button
               onClick={() => openPortal('overview')}
@@ -611,6 +637,42 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {/* Drawer Scrollable Content */}
             <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 scrollbar-thin">
+              {/* Universal Search in Drawer */}
+              <div>
+                <NavbarSearch
+                  theme={theme}
+                  className="w-full"
+                  onSelectProduct={(p) => {
+                    setSideMenuOpen(false);
+                    handleProductSelect(p);
+                  }}
+                  onNavigateToServices={() => {
+                    setSideMenuOpen(false);
+                    onNavigateToServices?.();
+                  }}
+                  onNavigateToBlog={() => {
+                    setSideMenuOpen(false);
+                    onNavigateToBlog?.();
+                  }}
+                  onNavigateToIndustries={() => {
+                    setSideMenuOpen(false);
+                    onNavigateToIndustries?.();
+                  }}
+                  onNavigateToAiSolutions={() => {
+                    setSideMenuOpen(false);
+                    onNavigateToAiSolutions?.();
+                  }}
+                  onOpenConsultant={() => {
+                    setSideMenuOpen(false);
+                    onOpenConsultant();
+                  }}
+                  onOpenSolutionBuilder={() => {
+                    setSideMenuOpen(false);
+                    onOpenSolutionBuilder();
+                  }}
+                />
+              </div>
+
               {/* Navigation Items */}
               <div className="space-y-1">
                 {/* AI Solutions Accordion */}

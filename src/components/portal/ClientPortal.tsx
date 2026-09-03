@@ -8,6 +8,7 @@ import { PortalInvoices } from './PortalInvoices';
 import { PortalApiKeys } from './PortalApiKeys';
 import { PortalSettings } from './PortalSettings';
 import { PortalSeoHealth } from './PortalSeoHealth';
+import { PortalAiCoworkers } from './PortalAiCoworkers';
 import {
   LayoutDashboard,
   CreditCard,
@@ -84,6 +85,7 @@ export const ClientPortal: React.FC<ClientPortalProps> = ({
 
   const tabs = [
     { id: 'overview', label: 'Client Dashboard', icon: LayoutDashboard, badge: null },
+    { id: 'ai-coworkers', label: 'AI Coworker Fleet', icon: Bot, badge: 'Active' },
     { id: 'seo', label: 'SEO Health & SERP', icon: TrendingUp, badge: '94/100' },
     { id: 'subscriptions', label: 'Subscriptions & Billing', icon: CreditCard, badge: user.subscription.planId.toUpperCase() },
     { id: 'products', label: 'Purchased AI Systems', icon: Layers, badge: user.purchasedProducts.length.toString() },
@@ -384,6 +386,13 @@ export const ClientPortal: React.FC<ClientPortalProps> = ({
               onNavigateTab={setPortalActiveTab}
               onOpenDeployModal={() => setIsDeployModalOpen(true)}
               theme={theme}
+            />
+          )}
+
+          {portalActiveTab === 'ai-coworkers' && (
+            <PortalAiCoworkers
+              theme={theme}
+              token={localStorage.getItem('artify_client_token')}
             />
           )}
 

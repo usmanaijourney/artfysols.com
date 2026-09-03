@@ -264,6 +264,18 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
 
           <div className="flex flex-wrap items-center gap-3 shrink-0">
             <button
+              onClick={() => onNavigateTab('ai-coworkers')}
+              id="dashboard-ai-coworkers-btn"
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all hover:scale-[1.02] border ${
+                isLight
+                  ? 'bg-violet-50 hover:bg-violet-100/80 border-violet-200 text-violet-900 shadow-sm'
+                  : 'bg-violet-950/40 hover:bg-violet-950/70 border-violet-500/30 text-violet-300'
+              }`}
+            >
+              <Bot className="w-3.5 h-3.5 text-violet-400" />
+              <span>AI Coworker Fleet</span>
+            </button>
+            <button
               onClick={() => onNavigateTab('seo')}
               id="dashboard-seo-health-btn"
               className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all hover:scale-[1.02] border ${

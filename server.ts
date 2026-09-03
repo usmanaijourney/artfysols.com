@@ -5,6 +5,7 @@ import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
 import { generateSitemapXml, generateRobotsTxt, getSitemapUrlList } from "./src/utils/sitemap";
 import v1Router from "./server/routes/v1";
+import { backgroundScheduler } from "./server/core/scheduler";
 
 dotenv.config();
 
@@ -100,19 +101,7 @@ async function startServer() {
         return res.status(400).json({ error: "Query is required." });
       }
 
-      // If GEMINI_API_KEY is available, call Gemini 3.7 Flash for custom AI reasoning
-      if (process.env.GEMINI_API_KEY) {
-        try {
-          const ai = new GoogleGenAI({
-            apiKey: process.env.GEMINI_API_KEY,
-            httpOptions: {
-              headers: {
-                "User-Agent": "aistudio-build",
-              },
-            },
-          });
-
-          const prompt = `You are the Principal AI Architect at Artify Solutions (artifysols.com), a premier AI-native software house specializing in custom artificial intelligence, autonomous agent orchestration, and enterprise automation.
+      const prompt = `You are the Principal AI Architect at Artify Solutions (artifysols.com), a premier AI-native software house specializing in custom artificial intelligence, autonomous agent orchestration, and enterprise automation.
           
 Client Question / Scenario: "${query}"
 Context - Target Industry: "${industry || 'General Enterprise'}", Department: "${department || 'Cross-Functional'}"
@@ -124,22 +113,19 @@ Provide a crisp, authoritative, visionary response structured in 3 clear section
 
 Keep your response punchy, precise, and professional. Avoid buzzwords and clichÃ©s.`;
 
-          const response = await ai.models.generateContent({
-            model: "gemini-3.7-flash",
-            contents: prompt,
-            config: {
-              temperature: 0.7,
-            },
-          });
+      try {
+        const { defaultAiProvider } = await import("./server/ai/provider");
+        const reply = await defaultAiProvider.generateText(prompt, {
+          temperature: 0.7,
+        });
 
-          return res.json({
-            reply: response.text,
-            mode: "live-gemini",
-            timestamp: new Date().toISOString(),
-          });
-        } catch (apiErr: any) {
-          console.warn("Gemini API call failed, falling back to intelligent knowledge base:", apiErr?.message);
-        }
+        return res.json({
+          reply,
+          mode: "live-gemini",
+          timestamp: new Date().toISOString(),
+        });
+      } catch (apiErr: any) {
+        console.warn("AI generation fallback activated:", apiErr?.message);
       }
 
       // Intelligent Fallback Knowledge Base Engine
@@ -200,6 +186,7 @@ Keep your response punchy, precise, and professional. Avoid buzzwords and clichÃ
 
   app.listen(PORT, "0.0.0.0", () => {
     console.log(`Artify Solutions Server active on http://0.0.0.0:${PORT}`);
+    backgroundScheduler.start();
   });
 }
 
