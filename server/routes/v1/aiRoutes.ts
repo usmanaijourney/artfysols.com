@@ -195,19 +195,19 @@ Always return clean, structured JSON with:
           {
             name: 'Ingress & Normalization Agent',
             role: 'High-throughput parsing of unstructured inputs',
-            model: 'gemini-3.7-flash (distilled)',
+            model: 'gemini-3.8-flash',
             sla: 'Sub-40ms P99',
           },
           {
             name: 'Deterministic Consensus Agent',
             role: 'Multi-party validation and business rules execution',
-            model: 'gemini-3.7-flash',
+            model: 'gemini-3.8-flash',
             sla: 'Zero-tolerance validation',
           },
           {
             name: 'Audit & Compliance Sentinel',
-            role: 'Immutable hash generation and SOC2 proof trails',
-            model: 'gemini-3.7-flash',
+            role: 'Immutable hash generation and verification trails',
+            model: 'gemini-3.8-flash',
             sla: 'Continuous background verification',
           },
         ],

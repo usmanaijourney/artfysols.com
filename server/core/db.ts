@@ -342,7 +342,7 @@ export class DatabaseStore {
         'Continuously analyzes enterprise AI trends, researches whitepapers, identifies content gaps, drafts technical guides, optimizes SEO, and prepares publishing queues with human oversight.',
       systemInstructions: `You are the lead Technical Content Manager for Artify Solutions. You research, structure, write, and optimize enterprise-grade articles on autonomous multi-agent systems, deterministic AI pipelines, and financial ledger automation. Never fabricate unverifiable claims. Always output structured, validated content.`,
       status: 'active',
-      model: 'gemini-3.7-flash',
+      model: 'gemini-3.8-flash',
       temperature: 0.3,
       assignedTools: [
         'searchWebsite',
@@ -395,7 +395,7 @@ export class DatabaseStore {
         'Monitors journal entries, cross-checks invoice hashes against bank settlement feeds, and raises deterministic alerts for out-of-balance transactions.',
       systemInstructions: `You are the lead compliance verification agent for Artify Solutions. You rigorously audit financial records, verifying math, dates, and authorization hashes with zero margin of error.`,
       status: 'active',
-      model: 'gemini-3.7-flash',
+      model: 'gemini-3.8-flash',
       temperature: 0.1,
       assignedTools: ['getProducts', 'createNotification', 'submitForApproval'],
       approvalPolicy: {

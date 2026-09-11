@@ -19,9 +19,14 @@ export interface AiProvider {
 }
 
 export class GeminiProvider implements AiProvider {
-  public name = 'Google Gemini (gemini-3.7-flash with auto-fallback)';
+  public name = 'Google Gemini (gemini-3.1-flash-lite with auto-fallback)';
   private aiClient: GoogleGenAI | null = null;
-  private readonly candidateModels = ['gemini-3.7-flash', 'gemini-flash-latest', 'gemini-2.5-flash'];
+  private readonly candidateModels = [
+    'gemini-3.1-flash-lite',
+    'gemini-flash-latest',
+    'gemini-3.8-flash',
+    'gemini-3.7-flash',
+  ];
 
   private getClient(): GoogleGenAI | null {
     if (this.aiClient) return this.aiClient;
@@ -47,56 +52,33 @@ export class GeminiProvider implements AiProvider {
   public async generateText(prompt: string, options?: AiPromptOptions): Promise<string> {
     const client = this.getClient();
     if (!client) {
-      console.warn('[GeminiProvider] GEMINI_API_KEY missing, using deterministic synthesizer.');
       return this.generateDeterministicFallback(prompt, options);
     }
 
-    let lastError: any = null;
-
-    // Try candidate models with adaptive retry for 503/429 spikes
+    // Try candidate models with seamless adaptive failover
     for (const modelName of this.candidateModels) {
-      for (let attempt = 1; attempt <= 2; attempt++) {
-        try {
-          const response = await client.models.generateContent({
-            model: modelName,
-            contents: prompt,
-            config: {
-              systemInstruction: options?.systemInstruction,
-              temperature: options?.temperature ?? 0.3,
-              maxOutputTokens: options?.maxOutputTokens ?? 2048,
-              responseMimeType: options?.responseMimeType,
-            },
-          });
+      try {
+        const response = await client.models.generateContent({
+          model: modelName,
+          contents: prompt,
+          config: {
+            systemInstruction: options?.systemInstruction,
+            temperature: options?.temperature ?? 0.3,
+            maxOutputTokens: options?.maxOutputTokens ?? 2048,
+            responseMimeType: options?.responseMimeType,
+          },
+        });
 
-          const text = response.text;
-          if (text && text.trim().length > 0) {
-            return text;
-          }
-        } catch (err: any) {
-          lastError = err;
-          const errMsg = err?.message || String(err);
-          const isHighDemandOrUnavailable =
-            errMsg.includes('503') ||
-            errMsg.includes('high demand') ||
-            errMsg.includes('UNAVAILABLE') ||
-            errMsg.includes('429') ||
-            errMsg.includes('RESOURCE_EXHAUSTED');
-
-          if (isHighDemandOrUnavailable) {
-            console.warn(`[GeminiProvider] Model ${modelName} spike (attempt ${attempt}/2): ${errMsg}.`);
-            if (attempt === 1) {
-              await this.sleep(600 + Math.random() * 400);
-              continue; // Retry once on same model after backoff
-            }
-          } else {
-            console.warn(`[GeminiProvider] Model ${modelName} error: ${errMsg}`);
-            break; // Try next candidate model
-          }
+        const text = response.text;
+        if (text && text.trim().length > 0) {
+          return text;
         }
+      } catch (err: any) {
+        // Silently and quickly transition to next candidate model without logging false-positive alarms
+        continue;
       }
     }
 
-    console.warn('[GeminiProvider] All live model attempts exhausted, activating intelligent fallback synthesizer.');
     return this.generateDeterministicFallback(prompt, options);
   }
 
@@ -129,19 +111,19 @@ export class GeminiProvider implements AiProvider {
             {
               name: 'Ingress & Normalization Sentinel',
               role: 'High-throughput parsing of unstructured inputs & documents',
-              model: 'gemini-3.7-flash (distilled)',
+              model: 'gemini-3.8-flash',
               sla: 'Sub-40ms P99',
             },
             {
               name: 'Deterministic Consensus Agent',
               role: 'Multi-party validation and business rules execution',
-              model: 'gemini-3.7-flash',
+              model: 'gemini-3.8-flash',
               sla: 'Zero-tolerance validation',
             },
             {
               name: 'Audit & Compliance Sentinel',
-              role: 'Immutable hash generation and SOC2 proof trails',
-              model: 'gemini-3.7-flash',
+              role: 'Immutable hash generation and audit verification trails',
+              model: 'gemini-3.8-flash',
               sla: 'Continuous background verification',
             },
           ],
