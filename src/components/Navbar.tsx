@@ -200,7 +200,10 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* AI Solutions Dropdown Trigger */}
           <div className="static" ref={dropdownRef}>
             <button
-              onClick={() => setSolutionsDropdownOpen(!solutionsDropdownOpen)}
+              onClick={(e) => {
+                setSolutionsDropdownOpen(false);
+                handleRouteClick(e, onNavigateToAiSolutions);
+              }}
               onMouseEnter={() => setSolutionsDropdownOpen(true)}
               id="nav-ai-solutions-dropdown-btn"
               className={`text-xs lg:text-[13px] xl:text-[13.5px] font-semibold px-3 lg:px-4 py-1.5 rounded-full transition-all flex items-center gap-1.5 ${
@@ -214,10 +217,20 @@ export const Navbar: React.FC<NavbarProps> = ({
                   ? 'text-slate-700 hover:text-slate-950 hover:bg-slate-200/70'
                   : 'text-zinc-300 hover:text-white hover:bg-white/[0.08]'
               }`}
+              title="Open AI Solutions Page (List or Tiles)"
             >
               <Sparkles className="w-3.5 h-3.5 text-violet-400" />
               <span>AI Solutions</span>
-              <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${solutionsDropdownOpen ? 'rotate-180' : ''}`} />
+              <span
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSolutionsDropdownOpen(!solutionsDropdownOpen);
+                }}
+                className="hover:opacity-80 p-0.5 rounded cursor-pointer"
+                title="Toggle Solutions Menu"
+              >
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${solutionsDropdownOpen ? 'rotate-180' : ''}`} />
+              </span>
             </button>
 
             {/* AI Solutions Mega Dropdown Menu */}
@@ -676,25 +689,43 @@ export const Navbar: React.FC<NavbarProps> = ({
               {/* Navigation Items */}
               <div className="space-y-1">
                 {/* AI Solutions Accordion */}
-                <div className="rounded-xl border border-white/[0.08] overflow-hidden bg-white/[0.02]">
-                  <button
-                    onClick={() => setMobileProductsOpen(!mobileProductsOpen)}
-                    className="w-full flex items-center justify-between p-3 text-left font-semibold text-xs text-white"
-                  >
-                    <div className="flex items-center gap-2.5">
+                <div className={`rounded-xl border overflow-hidden ${
+                  activeRoute === 'ai-solutions'
+                    ? 'border-violet-500/50 bg-violet-950/20'
+                    : isLight ? 'border-slate-200 bg-slate-50' : 'border-white/[0.08] bg-white/[0.02]'
+                }`}>
+                  <div className="flex items-center justify-between p-2.5">
+                    <button
+                      onClick={(e) => {
+                        setSideMenuOpen(false);
+                        handleRouteClick(e, onNavigateToAiSolutions);
+                      }}
+                      id="mobile-nav-ai-solutions-page-btn"
+                      className="flex-1 flex items-center gap-2.5 text-left font-semibold text-xs text-white hover:text-violet-300 transition-colors"
+                    >
                       <Sparkles className="w-4 h-4 text-violet-400" />
-                      <span>AI Solutions & Products</span>
-                    </div>
-                    <ChevronDown className={`w-4 h-4 text-zinc-400 transition-transform ${mobileProductsOpen ? 'rotate-180' : ''}`} />
-                  </button>
+                      <span>AI Solutions (Tiles & List)</span>
+                    </button>
+                    <button
+                      onClick={() => setMobileProductsOpen(!mobileProductsOpen)}
+                      className="p-1 rounded text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors"
+                      aria-label="Toggle solutions list"
+                    >
+                      <ChevronDown className={`w-4 h-4 transition-transform ${mobileProductsOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                  </div>
 
                   {mobileProductsOpen && (
                     <div className="p-2 pt-0 space-y-1 border-t border-white/[0.06] bg-black/30">
                       <button
-                        onClick={(e) => handleRouteClick(e, onNavigateToAiSolutions)}
-                        className="w-full text-left px-3 py-2 rounded-lg text-xs font-bold text-violet-400 hover:bg-violet-600/20"
+                        onClick={(e) => {
+                          setSideMenuOpen(false);
+                          handleRouteClick(e, onNavigateToAiSolutions);
+                        }}
+                        className="w-full text-left px-3 py-2 rounded-lg text-xs font-bold text-violet-400 hover:bg-violet-600/20 flex items-center justify-between"
                       >
-                        → All AI Solutions Overview
+                        <span>→ Open All Solutions (Tiles / List)</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
                       </button>
                       {AI_PRODUCTS.map((p) => (
                         <button

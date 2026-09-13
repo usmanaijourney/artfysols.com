@@ -17,6 +17,7 @@ import {
 interface WhatWeBuildProps {
   onOpenSolutionBuilder: () => void;
   onNavigateToContact: () => void;
+  onNavigateToAiSolutions?: () => void;
 }
 
 interface CapabilityItem {
@@ -34,6 +35,7 @@ interface CapabilityItem {
 export const WhatWeBuild: React.FC<WhatWeBuildProps> = ({
   onOpenSolutionBuilder,
   onNavigateToContact,
+  onNavigateToAiSolutions,
 }) => {
   const [selectedCapability, setSelectedCapability] = useState<string>('agents');
 
@@ -262,6 +264,15 @@ export const WhatWeBuild: React.FC<WhatWeBuildProps> = ({
                   <Sparkles className="w-3.5 h-3.5" />
                   <span>Build Solution in This Category</span>
                 </button>
+                {onNavigateToAiSolutions && (
+                  <button
+                    onClick={onNavigateToAiSolutions}
+                    className="inline-flex items-center gap-2 text-xs font-semibold text-violet-300 hover:text-white bg-violet-950/40 hover:bg-violet-900/50 border border-violet-800/40 px-4 py-2.5 rounded-lg transition-colors"
+                  >
+                    <span>Browse All Solutions (Tiles & List)</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                )}
                 <button
                   onClick={onNavigateToContact}
                   className="inline-flex items-center gap-2 text-xs font-semibold text-zinc-300 hover:text-white bg-[#16161f] border border-white/[0.1] px-4 py-2.5 rounded-lg transition-colors"

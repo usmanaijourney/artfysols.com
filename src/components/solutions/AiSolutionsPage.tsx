@@ -17,10 +17,14 @@ import {
   Workflow,
   ChevronRight,
   SlidersHorizontal,
+  LayoutGrid,
+  List,
 } from 'lucide-react';
 import { AiProductItem, AiProductCategoryType } from '../../types';
 import { AI_PRODUCTS, AI_PRODUCT_CATEGORIES } from '../../data/aiProductsData';
 import { ProductCard } from './ProductCard';
+import { ProductListItem } from './ProductListItem';
+import { safeGetLocalStorage, safeSetLocalStorage } from '../../utils/storage';
 import { updatePageSeo, generateCategoryKeywords, generateDynamicKeywords } from '../../utils/seo';
 
 interface AiSolutionsPageProps {
@@ -41,6 +45,16 @@ export const AiSolutionsPage: React.FC<AiSolutionsPageProps> = ({
   const isLight = theme === 'light';
   const [selectedCategory, setSelectedCategory] = useState<AiProductCategoryType>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [viewMode, setViewMode] = useState<'tiles' | 'list'>(() => {
+    const saved = safeGetLocalStorage('artify_solutions_view');
+    if (saved === 'list' || saved === 'tiles') return saved;
+    return 'tiles';
+  });
+
+  const handleSetViewMode = (mode: 'tiles' | 'list') => {
+    setViewMode(mode);
+    safeSetLocalStorage('artify_solutions_view', mode);
+  };
 
   // Filter products by category and search query
   const filteredProducts = useMemo(() => {
@@ -176,7 +190,7 @@ export const AiSolutionsPage: React.FC<AiSolutionsPageProps> = ({
               id="hero-explore-products-btn"
               className="px-7 py-3.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold text-sm sm:text-base shadow-xl shadow-violet-600/30 transition-all duration-200 active:scale-95 flex items-center gap-2.5 group"
             >
-              <span>Explore AI Products</span>
+              <span>Explore All Solutions (Tiles & List)</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
 
@@ -243,88 +257,177 @@ export const AiSolutionsPage: React.FC<AiSolutionsPageProps> = ({
       {/* 2. AI Product Ecosystem Section */}
       <section id="our-ai-products" className="py-24 relative">
         <div className="w-[92%] sm:w-[88%] max-w-7xl mx-auto">
-          {/* Section Header */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+          {/* Section Header with Search & View Toggle */}
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
             <div>
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/25 text-violet-400 text-xs font-semibold uppercase tracking-wider mb-3">
                 <Cpu className="w-3.5 h-3.5" />
                 <span>Production-Ready Modular Architecture</span>
               </div>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-display tracking-tight">
-                Our AI Products
+                All AI Solutions & Engines
               </h2>
               <p
                 className={`text-base sm:text-lg max-w-2xl mt-2 leading-relaxed ${
                   isLight ? 'text-slate-600' : 'text-zinc-400'
                 }`}
               >
-                Explore our full suite of autonomous digital workers, neural knowledge engines, real-time integration meshes, and domain models.
+                Explore our full suite of autonomous digital workers, neural knowledge engines, real-time integration meshes, and domain models in your preferred view.
               </p>
             </div>
 
-            {/* Live Search Input */}
-            <div className="w-full md:w-80 relative shrink-0">
-              <Search className="w-4 h-4 text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                placeholder="Search products, features, use cases..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                id="search-ai-products-input"
-                className={`w-full pl-10 pr-4 py-2.5 rounded-xl text-sm border focus:outline-none focus:ring-2 focus:ring-violet-500 transition-all ${
-                  isLight
-                    ? 'bg-white border-slate-300 text-slate-900 placeholder:text-slate-400'
-                    : 'bg-[#0f0f18] border-white/10 text-white placeholder:text-zinc-500 focus:border-violet-500/50'
-                }`}
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-zinc-400 hover:text-white"
-                >
-                  Clear
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* 3. Product Category Filters */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-10 no-scrollbar">
-            {AI_PRODUCT_CATEGORIES.map((cat) => {
-              const isSelected = selectedCategory === cat.id;
-              return (
-                <button
-                  key={cat.id}
-                  onClick={() => setSelectedCategory(cat.id)}
-                  id={`filter-category-${cat.id}`}
-                  className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 flex items-center gap-2 ${
-                    isSelected
-                      ? isLight
-                        ? 'bg-violet-600 text-white shadow-md shadow-violet-600/20'
-                        : 'bg-violet-600 text-white shadow-lg shadow-violet-600/30'
-                      : isLight
-                      ? 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'
-                      : 'bg-[#0c0c14] text-zinc-300 border border-white/[0.06] hover:bg-white/[0.06] hover:text-white'
+            {/* Right Controls: Search and View Mode Switcher */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
+              {/* Live Search Input */}
+              <div className="w-full sm:w-72 relative shrink-0">
+                <Search className="w-4 h-4 text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  placeholder="Search solutions, tags, models..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  id="search-ai-products-input"
+                  className={`w-full pl-10 pr-14 py-2.5 rounded-xl text-xs sm:text-sm border focus:outline-none focus:ring-2 focus:ring-violet-500 transition-all ${
+                    isLight
+                      ? 'bg-white border-slate-300 text-slate-900 placeholder:text-slate-400'
+                      : 'bg-[#0f0f18] border-white/10 text-white placeholder:text-zinc-500 focus:border-violet-500/50'
                   }`}
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-zinc-400 hover:text-white"
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
+
+              {/* View Switcher: Tiles vs List */}
+              <div
+                id="solutions-view-mode-switcher"
+                className={`p-1 rounded-xl border flex items-center shrink-0 self-start sm:self-auto ${
+                  isLight
+                    ? 'bg-slate-100 border-slate-200'
+                    : 'bg-[#0e0e16] border-white/[0.08]'
+                }`}
+                role="group"
+                aria-label="View format toggle"
+              >
+                <button
+                  type="button"
+                  onClick={() => handleSetViewMode('tiles')}
+                  id="view-mode-tiles-btn"
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                    viewMode === 'tiles'
+                      ? isLight
+                        ? 'bg-white text-violet-700 shadow-sm font-bold'
+                        : 'bg-violet-600 text-white shadow-md shadow-violet-600/30 font-bold'
+                      : isLight
+                      ? 'text-slate-600 hover:text-slate-950'
+                      : 'text-zinc-400 hover:text-white'
+                  }`}
+                  title="Switch to Tiles / Grid View"
                 >
-                  <span>{cat.label}</span>
+                  <LayoutGrid className="w-3.5 h-3.5" />
+                  <span>Tiles</span>
                 </button>
-              );
-            })}
+
+                <button
+                  type="button"
+                  onClick={() => handleSetViewMode('list')}
+                  id="view-mode-list-btn"
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                    viewMode === 'list'
+                      ? isLight
+                        ? 'bg-white text-violet-700 shadow-sm font-bold'
+                        : 'bg-violet-600 text-white shadow-md shadow-violet-600/30 font-bold'
+                      : isLight
+                      ? 'text-slate-600 hover:text-slate-950'
+                      : 'text-zinc-400 hover:text-white'
+                  }`}
+                  title="Switch to List View"
+                >
+                  <List className="w-3.5 h-3.5" />
+                  <span>List</span>
+                </button>
+              </div>
+            </div>
           </div>
 
-          {/* 4. Products Grid */}
-          {filteredProducts.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
-              {filteredProducts.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  onSelectProduct={onSelectProduct}
-                  theme={theme}
-                />
-              ))}
+          {/* 3. Product Category Filters & Total Count Ribbon */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 mb-8 border-b border-white/[0.06]">
+            {/* Category Pills */}
+            <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 no-scrollbar">
+              {AI_PRODUCT_CATEGORIES.map((cat) => {
+                const isSelected = selectedCategory === cat.id;
+                return (
+                  <button
+                    key={cat.id}
+                    onClick={() => setSelectedCategory(cat.id)}
+                    id={`filter-category-${cat.id}`}
+                    className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-200 flex items-center gap-1.5 ${
+                      isSelected
+                        ? isLight
+                          ? 'bg-violet-600 text-white shadow-md shadow-violet-600/20'
+                          : 'bg-violet-600 text-white shadow-lg shadow-violet-600/30'
+                        : isLight
+                        ? 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'
+                        : 'bg-[#0c0c14] text-zinc-300 border border-white/[0.06] hover:bg-white/[0.06] hover:text-white'
+                    }`}
+                  >
+                    <span>{cat.label}</span>
+                  </button>
+                );
+              })}
             </div>
+
+            {/* Total Count Badge */}
+            <div className="flex items-center gap-2 text-xs font-mono-code text-zinc-400 shrink-0">
+              <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
+              <span>
+                Showing <strong className={isLight ? 'text-slate-900' : 'text-white'}>{filteredProducts.length}</strong> of {AI_PRODUCTS.length} Solutions
+              </span>
+              <span className="opacity-40">•</span>
+              <span className="uppercase text-[10px] text-violet-400 font-bold">
+                {viewMode === 'tiles' ? 'Tiles View' : 'List View'}
+              </span>
+            </div>
+          </div>
+
+          {/* 4. Products Display: Either Tiles (Grid) or List */}
+          {filteredProducts.length > 0 ? (
+            viewMode === 'tiles' ? (
+              /* TILES / GRID VIEW */
+              <div
+                id="solutions-tiles-container"
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 animate-in fade-in duration-200"
+              >
+                {filteredProducts.map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    onSelectProduct={onSelectProduct}
+                    theme={theme}
+                  />
+                ))}
+              </div>
+            ) : (
+              /* LIST VIEW */
+              <div
+                id="solutions-list-container"
+                className="space-y-4 animate-in fade-in duration-200"
+              >
+                {filteredProducts.map((product) => (
+                  <ProductListItem
+                    key={product.id}
+                    product={product}
+                    onSelectProduct={onSelectProduct}
+                    theme={theme}
+                  />
+                ))}
+              </div>
+            )
           ) : (
             <div
               className={`p-12 rounded-2xl border text-center max-w-xl mx-auto ${
@@ -332,9 +435,9 @@ export const AiSolutionsPage: React.FC<AiSolutionsPageProps> = ({
               }`}
             >
               <Search className="w-10 h-10 text-zinc-500 mx-auto mb-4" />
-              <h3 className="text-xl font-bold font-display">No AI Products Found</h3>
+              <h3 className="text-xl font-bold font-display">No AI Solutions Found</h3>
               <p className="text-sm text-zinc-400 mt-2">
-                No products match "{searchQuery}" under the selected category filter.
+                No solutions match "{searchQuery}" under the selected category filter.
               </p>
               <button
                 onClick={() => {

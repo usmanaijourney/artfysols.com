@@ -186,7 +186,7 @@ export const Hero: React.FC<HeroProps> = ({
                 id="hero-secondary-cta"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 text-sm font-semibold text-zinc-200 hover:text-white bg-[#101015] hover:bg-[#181820] border border-white/[0.12] px-6 py-3.5 rounded-xl transition-all shadow-sm"
               >
-                <span>Explore Capabilities</span>
+                <span>Explore AI Solutions</span>
               </button>
 
               <button

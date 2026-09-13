@@ -430,6 +430,7 @@ function MainAppContent() {
             <WhatWeBuild
               onOpenSolutionBuilder={() => handleOpenSolutionBuilder()}
               onNavigateToContact={handleNavigateToContact}
+              onNavigateToAiSolutions={() => navigateToRoute('ai-solutions', '#ai-solutions')}
             />
 
             {/* 5. AI Agents */}

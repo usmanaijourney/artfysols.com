@@ -112,7 +112,7 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={onNavigateToAiSolutions}
                   className="text-violet-400 hover:text-violet-300 font-semibold flex items-center gap-1"
                 >
-                  <span>All 8 Products</span>
+                  <span>All AI Solutions (Tiles & List)</span>
                   <ArrowRight className="w-3 h-3" />
                 </button>
               </li>
