@@ -135,7 +135,7 @@ export const AiSolutionsPage: React.FC<AiSolutionsPageProps> = ({
       } transition-colors duration-300`}
     >
       {/* 1. Hero Section */}
-      <section className="relative pt-32 pb-20 sm:pt-40 sm:pb-28 overflow-hidden border-b border-white/[0.06]">
+      <section className="relative pt-28 pb-14 sm:pt-36 sm:pb-16 overflow-hidden border-b border-white/[0.06]">
         {/* Dynamic Neural Particle / Ambient Grid Background */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div
@@ -183,33 +183,71 @@ export const AiSolutionsPage: React.FC<AiSolutionsPageProps> = ({
             designed to automate complex workflows, unlock institutional data, and transform enterprises.
           </p>
 
-          {/* Hero CTAs */}
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-            <button
-              onClick={scrollToProducts}
-              id="hero-explore-products-btn"
-              className="px-7 py-3.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold text-sm sm:text-base shadow-xl shadow-violet-600/30 transition-all duration-200 active:scale-95 flex items-center gap-2.5 group"
+          {/* Hero CTAs with Direct View Toggle */}
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3.5">
+            {/* View Mode Toggle Pill directly in Hero */}
+            <div
+              className={`p-1.5 rounded-2xl border flex items-center gap-1 shadow-lg backdrop-blur-md ${
+                isLight ? 'bg-white/95 border-slate-200' : 'bg-[#0d0d16]/95 border-white/[0.12]'
+              }`}
+              role="group"
+              aria-label="View format"
             >
-              <span>Explore All Solutions (Tiles & List)</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </button>
+              <button
+                type="button"
+                onClick={() => {
+                  handleSetViewMode('tiles');
+                  scrollToProducts();
+                }}
+                id="hero-toggle-tiles-btn"
+                className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all duration-200 ${
+                  viewMode === 'tiles'
+                    ? 'bg-violet-600 text-white shadow-md shadow-violet-600/30'
+                    : isLight
+                    ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                    : 'text-zinc-400 hover:text-white hover:bg-white/[0.06]'
+                }`}
+              >
+                <LayoutGrid className="w-4 h-4" />
+                <span>Tiles View ({filteredProducts.length})</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  handleSetViewMode('list');
+                  scrollToProducts();
+                }}
+                id="hero-toggle-list-btn"
+                className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all duration-200 ${
+                  viewMode === 'list'
+                    ? 'bg-violet-600 text-white shadow-md shadow-violet-600/30'
+                    : isLight
+                    ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                    : 'text-zinc-400 hover:text-white hover:bg-white/[0.06]'
+                }`}
+              >
+                <List className="w-4 h-4" />
+                <span>List View ({filteredProducts.length})</span>
+              </button>
+            </div>
 
             <button
               onClick={onOpenConsultant}
               id="hero-talk-to-experts-btn"
-              className={`px-7 py-3.5 rounded-xl font-bold text-sm sm:text-base border transition-all duration-200 active:scale-95 flex items-center gap-2.5 ${
+              className={`px-5 py-2.5 sm:py-3 rounded-xl font-bold text-xs sm:text-sm border transition-all duration-200 active:scale-95 flex items-center gap-2 ${
                 isLight
                   ? 'bg-white border-slate-300 text-slate-800 hover:bg-slate-50'
                   : 'bg-white/[0.04] border-white/10 text-white hover:bg-white/[0.08] hover:border-violet-500/40'
               }`}
             >
               <Bot className="w-4 h-4 text-violet-400" />
-              <span>Talk to Our AI Experts</span>
+              <span>Talk to AI Advisor</span>
             </button>
           </div>
 
           {/* Ecosystem Telemetry Highlights */}
-          <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 max-w-4xl mx-auto">
+          <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-5 max-w-4xl mx-auto">
             <div
               className={`p-4 rounded-xl border text-left ${
                 isLight
@@ -255,7 +293,7 @@ export const AiSolutionsPage: React.FC<AiSolutionsPageProps> = ({
       </section>
 
       {/* 2. AI Product Ecosystem Section */}
-      <section id="our-ai-products" className="py-24 relative">
+      <section id="our-ai-products" className="py-14 sm:py-16 relative">
         <div className="w-[92%] sm:w-[88%] max-w-7xl mx-auto">
           {/* Section Header with Search & View Toggle */}
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">

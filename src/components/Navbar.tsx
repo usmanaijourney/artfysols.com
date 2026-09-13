@@ -204,9 +204,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setSolutionsDropdownOpen(false);
                 handleRouteClick(e, onNavigateToAiSolutions);
               }}
-              onMouseEnter={() => setSolutionsDropdownOpen(true)}
-              id="nav-ai-solutions-dropdown-btn"
-              className={`text-xs lg:text-[13px] xl:text-[13.5px] font-semibold px-3 lg:px-4 py-1.5 rounded-full transition-all flex items-center gap-1.5 ${
+              id="nav-ai-solutions-btn"
+              className={`text-xs lg:text-[13px] xl:text-[13.5px] font-semibold px-3 lg:px-4 py-1.5 rounded-full transition-all flex items-center gap-1.5 whitespace-nowrap ${
                 activeRoute === 'ai-solutions' || activeRoute === 'product-detail'
                   ? 'bg-violet-600 text-white shadow-md shadow-violet-600/30'
                   : solutionsDropdownOpen
@@ -217,7 +216,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   ? 'text-slate-700 hover:text-slate-950 hover:bg-slate-200/70'
                   : 'text-zinc-300 hover:text-white hover:bg-white/[0.08]'
               }`}
-              title="Open AI Solutions Page (List or Tiles)"
+              title="Open AI Solutions Page (Tiles & List)"
             >
               <Sparkles className="w-3.5 h-3.5 text-violet-400" />
               <span>AI Solutions</span>
@@ -226,19 +225,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                   e.stopPropagation();
                   setSolutionsDropdownOpen(!solutionsDropdownOpen);
                 }}
-                className="hover:opacity-80 p-0.5 rounded cursor-pointer"
-                title="Toggle Solutions Menu"
+                className="hover:opacity-80 p-0.5 rounded cursor-pointer ml-0.5"
+                title="Toggle Quick Preview"
               >
                 <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${solutionsDropdownOpen ? 'rotate-180' : ''}`} />
               </span>
             </button>
 
-            {/* AI Solutions Mega Dropdown Menu */}
+            {/* AI Solutions Quick Menu (Only on deliberate chevron click) */}
             {solutionsDropdownOpen && (
               <div
                 id="nav-menu-container"
-                onMouseEnter={() => setSolutionsDropdownOpen(true)}
-                onMouseLeave={() => setSolutionsDropdownOpen(false)}
                 className={`absolute top-full mt-2 sm:mt-2.5 left-1/2 -translate-x-1/2 w-[calc(100vw-2rem)] sm:w-[calc(100vw-3rem)] md:w-[calc(100vw-4rem)] max-w-7xl max-h-[calc(100vh-5.5rem)] overflow-y-auto p-5 sm:p-7 rounded-2xl sm:rounded-3xl border shadow-2xl backdrop-blur-2xl transition-all duration-200 animate-in fade-in zoom-in-95 z-50 ${
                   isLight
                     ? 'bg-white/98 border-slate-200/90 shadow-slate-900/15 text-slate-900'
