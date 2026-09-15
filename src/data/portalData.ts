@@ -1,6 +1,7 @@
 import {
   UserProfile,
   PurchasedProduct,
+  ActiveAIProject,
   ArtifyProduct,
   ArtifyProductCategory,
   ArtifyService,
@@ -829,6 +830,64 @@ export const DEMO_USERS: Record<string, UserProfile> = {
           errorRate: '0.000%',
           lastSynced: '2 mins ago',
         },
+      },
+    ],
+    
+    activeProjects: [
+      {
+        id: 'proj-apex-01',
+        name: 'Autonomous Operations & Multimodal Logistics Routing Layer',
+        category: 'Predictive Logistics',
+        status: 'in_production',
+        stageProgress: 96,
+        startDate: '2025-11-01',
+        targetLaunchDate: '2026-09-01',
+        leadArchitect: 'Dr. Elena Rostova (Principal AI Architect)',
+        description: 'End-to-end continuous optimization of cross-border freight schedules, customs declarations, and autonomous multi-agent operational routing.',
+        techStack: ['NetSuite ERP', 'SAP S/4HANA', 'AWS ECS', 'Kafka Event Mesh'],
+        assignedAgents: ['Freight Sentinel', 'Lead Time Forecaster', 'Ledger Reconciliation Sentinel'],
+        milestones: [
+          { title: 'Global Carrier EDI Protocol Integration', status: 'completed', completionDate: 'Nov 2025' },
+          { title: 'Customs Manifest Automated Extraction', status: 'completed', completionDate: 'Jan 2026' },
+          { title: 'Autonomous Multi-Facility Dispatch Rollout', status: 'completed', completionDate: 'May 2026' },
+          { title: 'Global Multi-Region Production Scale', status: 'in_progress', completionDate: 'Target: Sep 2026' },
+        ],
+        kpis: [
+          { label: 'Dispatch Latency', value: '88ms', trend: '-52% faster' },
+          { label: 'Monthly Hours Saved', value: '530h', trend: '+34%' },
+          { label: 'Routing Accuracy', value: '99.98%', trend: '+0.4%' },
+        ],
+        liveEndpoint: 'https://apex-recon.artifysols.com/v1/reconcile',
+        recentLogs: [
+          { timestamp: '14:20:00 UTC', event: 'Multimodal container buffer optimization loop finished with zero exceptions.', status: 'ok' },
+          { timestamp: '12:00:00 UTC', event: 'Health check probe returned 200 OK across all primary container nodes.', status: 'ok' },
+        ],
+      },
+      {
+        id: 'proj-apex-02',
+        name: 'Enterprise Supply Chain Anomaly Scout',
+        category: 'Autonomous Agent Fleet',
+        status: 'validation_phase',
+        stageProgress: 78,
+        startDate: '2026-03-15',
+        targetLaunchDate: '2026-10-30',
+        leadArchitect: 'Dr. Elena Rostova (Principal AI Architect)',
+        description: 'Deep neural predictive system flagging port delays and material shortage risks 72 hours before assembly line impact.',
+        techStack: ['Project44 Telemetry', 'Snowflake Data Cloud', 'PyTorch Embeddings'],
+        assignedAgents: ['Material Buffer Forecaster', 'Port Congestion Scout'],
+        milestones: [
+          { title: 'AIS Maritime Live Ingestion Bridge', status: 'completed', completionDate: 'Apr 2026' },
+          { title: 'Predictive Stockout Model Fine-Tuning', status: 'completed', completionDate: 'Jun 2026' },
+          { title: 'Real-Time ERP Automated Alert Trigger', status: 'in_progress', completionDate: 'Target: Oct 2026' },
+        ],
+        kpis: [
+          { label: 'Forecast Horizon', value: '72 Hours Ahead', trend: 'High Confidence' },
+          { label: 'Prevented Stockouts', value: '14 Events', trend: 'Saved $1.2M' },
+        ],
+        liveEndpoint: 'https://apex-bi.artifysols.com/v1/analytics',
+        recentLogs: [
+          { timestamp: '15:10:00 UTC', event: 'Rotterdam terminal congestion spike analyzed: alternative rail routing suggested.', status: 'info' },
+        ],
       },
     ],
     

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { MotionReveal, MotionStaggerContainer, MotionStaggerItem } from './components/common/MotionReveal';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { TrustStatement } from './components/TrustStatement';
@@ -25,6 +27,7 @@ import { SolutionBuilderWizard } from './components/SolutionBuilderWizard';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { AuthModal } from './components/portal/AuthModal';
 import { ClientPortal } from './components/portal/ClientPortal';
+import { QuickAccessWidget } from './components/portal/QuickAccessWidget';
 import { BlogPage } from './components/blog/BlogPage';
 import { BlogPreviewSection } from './components/BlogPreviewSection';
 import { AiSolutionsPage } from './components/solutions/AiSolutionsPage';
@@ -265,237 +268,374 @@ function MainAppContent() {
         onToggleTheme={handleToggleTheme}
       />
 
-      {/* Main Multi-Page Dynamic Switch */}
+      {/* Main Multi-Page Dynamic Switch with Page Route Animations */}
       <main>
-        {activeRoute === 'ai-solutions' && (
-          <AiSolutionsPage
-            onSelectProduct={handleSelectProduct}
-            onOpenConsultant={() => setIsConsultantOpen(true)}
-            onOpenSolutionBuilder={() => handleOpenSolutionBuilder()}
-            onNavigateToContact={handleNavigateToContact}
-            theme={theme}
-          />
-        )}
+        <AnimatePresence mode="wait">
+          {activeRoute === 'ai-solutions' && (
+            <motion.div
+              key="ai-solutions"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <AiSolutionsPage
+                onSelectProduct={handleSelectProduct}
+                onOpenConsultant={() => setIsConsultantOpen(true)}
+                onOpenSolutionBuilder={() => handleOpenSolutionBuilder()}
+                onNavigateToContact={handleNavigateToContact}
+                theme={theme}
+              />
+            </motion.div>
+          )}
 
-        {activeRoute === 'product-detail' && (
-          <AiProductDetailPage
-            productSlug={activeProductSlug}
-            onBackToSolutions={() => navigateToRoute('ai-solutions', '#ai-solutions')}
-            onSelectProduct={handleSelectProduct}
-            onOpenConsultant={() => setIsConsultantOpen(true)}
-            onOpenSolutionBuilder={() => handleOpenSolutionBuilder()}
-            onNavigateToContact={handleNavigateToContact}
-            theme={theme}
-          />
-        )}
+          {activeRoute === 'product-detail' && (
+            <motion.div
+              key={`product-${activeProductSlug}`}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <AiProductDetailPage
+                productSlug={activeProductSlug}
+                onBackToSolutions={() => navigateToRoute('ai-solutions', '#ai-solutions')}
+                onSelectProduct={handleSelectProduct}
+                onOpenConsultant={() => setIsConsultantOpen(true)}
+                onOpenSolutionBuilder={() => handleOpenSolutionBuilder()}
+                onNavigateToContact={handleNavigateToContact}
+                theme={theme}
+              />
+            </motion.div>
+          )}
 
-        {activeRoute === 'services' && (
-          <ServicesPage
-            onOpenConsultant={() => setIsConsultantOpen(true)}
-            onOpenSolutionBuilder={() => handleOpenSolutionBuilder()}
-            onNavigateToContact={handleNavigateToContact}
-            onNavigateToAiSolutions={() => navigateToRoute('ai-solutions', '#ai-solutions')}
-            theme={theme}
-          />
-        )}
+          {activeRoute === 'services' && (
+            <motion.div
+              key="services"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <ServicesPage
+                onOpenConsultant={() => setIsConsultantOpen(true)}
+                onOpenSolutionBuilder={() => handleOpenSolutionBuilder()}
+                onNavigateToContact={handleNavigateToContact}
+                onNavigateToAiSolutions={() => navigateToRoute('ai-solutions', '#ai-solutions')}
+                theme={theme}
+              />
+            </motion.div>
+          )}
 
-        {activeRoute === 'industries' && (
-          <IndustriesPage
-            onOpenSolutionBuilder={(id) => handleOpenSolutionBuilder(id)}
-            onNavigateToContact={handleNavigateToContact}
-            theme={theme}
-          />
-        )}
+          {activeRoute === 'industries' && (
+            <motion.div
+              key="industries"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <IndustriesPage
+                onOpenSolutionBuilder={(id) => handleOpenSolutionBuilder(id)}
+                onNavigateToContact={handleNavigateToContact}
+                theme={theme}
+              />
+            </motion.div>
+          )}
 
-        {activeRoute === 'case-studies' && (
-          <CaseStudiesPage
-            onOpenSolutionBuilder={() => handleOpenSolutionBuilder()}
-            onNavigateToContact={handleNavigateToContact}
-            theme={theme}
-          />
-        )}
+          {activeRoute === 'case-studies' && (
+            <motion.div
+              key="case-studies"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <CaseStudiesPage
+                onOpenSolutionBuilder={() => handleOpenSolutionBuilder()}
+                onNavigateToContact={handleNavigateToContact}
+                theme={theme}
+              />
+            </motion.div>
+          )}
 
-        {activeRoute === 'about' && (
-          <AboutPage
-            onNavigateToContact={handleNavigateToContact}
-            onNavigateToAiSolutions={() => navigateToRoute('ai-solutions', '#ai-solutions')}
-            theme={theme}
-          />
-        )}
+          {activeRoute === 'about' && (
+            <motion.div
+              key="about"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <AboutPage
+                onNavigateToContact={handleNavigateToContact}
+                onNavigateToAiSolutions={() => navigateToRoute('ai-solutions', '#ai-solutions')}
+                theme={theme}
+              />
+            </motion.div>
+          )}
 
-        {activeRoute === 'contact' && (
-          <ContactPage
-            prefilledBrief={prefilledBrief}
-            onOpenConsultant={() => setIsConsultantOpen(true)}
-            theme={theme}
-          />
-        )}
+          {activeRoute === 'contact' && (
+            <motion.div
+              key="contact"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <ContactPage
+                prefilledBrief={prefilledBrief}
+                onOpenConsultant={() => setIsConsultantOpen(true)}
+                theme={theme}
+              />
+            </motion.div>
+          )}
 
-        {activeRoute === 'privacy' && <LegalPage type="privacy" theme={theme} />}
+          {activeRoute === 'privacy' && (
+            <motion.div
+              key="privacy"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <LegalPage type="privacy" theme={theme} />
+            </motion.div>
+          )}
 
-        {activeRoute === 'terms' && <LegalPage type="terms" theme={theme} />}
+          {activeRoute === 'terms' && (
+            <motion.div
+              key="terms"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <LegalPage type="terms" theme={theme} />
+            </motion.div>
+          )}
 
-        {activeRoute === 'blog' && (
-          <BlogPage
-            theme={theme}
-            onBackToHome={() => navigateToRoute('home', '#hero')}
-            onOpenSolutionBuilder={() => handleOpenSolutionBuilder()}
-            onOpenConsultant={() => setIsConsultantOpen(true)}
-            onToggleTheme={handleToggleTheme}
-          />
-        )}
+          {activeRoute === 'blog' && (
+            <motion.div
+              key="blog"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <BlogPage
+                theme={theme}
+                onBackToHome={() => navigateToRoute('home', '#hero')}
+                onOpenSolutionBuilder={() => handleOpenSolutionBuilder()}
+                onOpenConsultant={() => setIsConsultantOpen(true)}
+                onToggleTheme={handleToggleTheme}
+              />
+            </motion.div>
+          )}
 
-        {activeRoute === 'home' && (
-          <>
-            {/* 1. Hero Section */}
-            <Hero
-              onOpenSolutionBuilder={() => handleOpenSolutionBuilder()}
-              onOpenConsultant={() => setIsConsultantOpen(true)}
-              onNavigateToCapabilities={handleNavigateToCapabilities}
-              onNavigateToContact={handleNavigateToContact}
-            />
+          {activeRoute === 'home' && (
+            <motion.div
+              key="home"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.35 }}
+            >
+              {/* 1. Hero Section */}
+              <Hero
+                onOpenSolutionBuilder={() => handleOpenSolutionBuilder()}
+                onOpenConsultant={() => setIsConsultantOpen(true)}
+                onNavigateToCapabilities={handleNavigateToCapabilities}
+                onNavigateToContact={handleNavigateToContact}
+              />
 
-            {/* 2. Featured AI Products Showcase Ribbon on Homepage */}
-            <section className="py-20 border-b border-white/[0.06] bg-black/40">
-              <div className="w-[92%] sm:w-[88%] max-w-7xl mx-auto">
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-                  <div>
-                    <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/30 text-violet-400 text-xs font-semibold uppercase tracking-wider mb-3">
-                      <Sparkles className="w-3.5 h-3.5" />
-                      <span>Enterprise Product Suite</span>
-                    </div>
-                    <h2 className="text-3xl sm:text-4xl font-bold font-display tracking-tight text-white">
-                      Featured AI Solutions
-                    </h2>
-                    <p className="text-sm sm:text-base text-zinc-400 mt-2 max-w-xl">
-                      Explore our top enterprise-ready autonomous AI products engineered for mission-critical operations.
-                    </p>
-                  </div>
+              {/* Quick Access Widget for Logged-In Users (ClientPortal Context) */}
+              <QuickAccessWidget theme={theme} />
 
-                  <button
-                    onClick={() => navigateToRoute('ai-solutions', '#ai-solutions')}
-                    className="px-5 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-xs sm:text-sm font-bold flex items-center gap-2 self-start md:self-auto transition-all"
-                  >
-                    <span>View All 8 AI Products</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-                  {AI_PRODUCTS.slice(0, 4).map((product) => (
-                    <div
-                      key={product.id}
-                      onClick={() => handleSelectProduct(product)}
-                      className="p-6 rounded-2xl bg-[#0c0c14] border border-white/[0.08] hover:border-violet-500/50 cursor-pointer transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between group"
-                    >
+              {/* 2. Featured AI Products Showcase Ribbon on Homepage */}
+              <section className="py-20 border-b border-white/[0.06] bg-black/40 relative">
+                <div className="w-[92%] sm:w-[88%] max-w-7xl mx-auto">
+                  <MotionReveal>
+                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
                       <div>
-                        <div className="flex items-center justify-between mb-4">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-violet-400 font-mono-code">
-                            {product.categoryLabel}
-                          </span>
-                          <span className="text-[10px] font-bold text-emerald-400 font-mono-code">
-                            {product.uptime}
-                          </span>
+                        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/30 text-violet-400 text-xs font-semibold uppercase tracking-wider mb-3">
+                          <Sparkles className="w-3.5 h-3.5" />
+                          <span>Enterprise Product Suite</span>
                         </div>
-                        <h3 className="text-xl font-bold text-white font-display group-hover:text-violet-300 transition-colors">
-                          {product.name}
-                        </h3>
-                        <p className="text-xs text-violet-400/90 font-mono-code mt-1">
-                          {product.tagline}
-                        </p>
-                        <p className="text-xs text-zinc-400 mt-3 line-clamp-3 leading-relaxed">
-                          {product.shortDescription}
+                        <h2 className="text-3xl sm:text-4xl font-bold font-display tracking-tight text-white">
+                          Featured AI Solutions
+                        </h2>
+                        <p className="text-sm sm:text-base text-zinc-400 mt-2 max-w-xl">
+                          Explore our top enterprise-ready autonomous AI products engineered for mission-critical operations.
                         </p>
                       </div>
 
-                      <div className="mt-6 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs">
-                        <span className="font-bold text-zinc-300 font-mono-code">
-                          {product.metrics[0]?.value}
-                        </span>
-                        <span className="text-violet-400 font-bold group-hover:translate-x-1 transition-transform flex items-center gap-1">
-                          <span>Explore</span>
-                          <ArrowRight className="w-3.5 h-3.5" />
-                        </span>
-                      </div>
+                      <button
+                        onClick={() => navigateToRoute('ai-solutions', '#ai-solutions')}
+                        className="px-5 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-xs sm:text-sm font-bold flex items-center gap-2 self-start md:self-auto transition-all"
+                      >
+                        <span>View All 8 AI Products</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
                     </div>
-                  ))}
+                  </MotionReveal>
+
+                  <MotionStaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+                    {AI_PRODUCTS.slice(0, 4).map((product) => (
+                      <MotionStaggerItem key={product.id}>
+                        <motion.div
+                          whileHover={{ y: -6, transition: { duration: 0.25 } }}
+                          onClick={() => handleSelectProduct(product)}
+                          className="p-6 rounded-2xl bg-[#0c0c14] border border-white/[0.08] hover:border-violet-500/50 cursor-pointer transition-colors duration-300 flex flex-col justify-between group h-full shadow-lg hover:shadow-violet-500/10"
+                        >
+                          <div>
+                            <div className="flex items-center justify-between mb-4">
+                              <span className="text-[10px] font-bold uppercase tracking-wider text-violet-400 font-mono-code">
+                                {product.categoryLabel}
+                              </span>
+                              <span className="text-[10px] font-bold text-emerald-400 font-mono-code">
+                                {product.uptime}
+                              </span>
+                            </div>
+                            <h3 className="text-xl font-bold text-white font-display group-hover:text-violet-300 transition-colors">
+                              {product.name}
+                            </h3>
+                            <p className="text-xs text-violet-400/90 font-mono-code mt-1">
+                              {product.tagline}
+                            </p>
+                            <p className="text-xs text-zinc-400 mt-3 line-clamp-3 leading-relaxed">
+                              {product.shortDescription}
+                            </p>
+                          </div>
+
+                          <div className="mt-6 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs">
+                            <span className="font-bold text-zinc-300 font-mono-code">
+                              {product.metrics[0]?.value}
+                            </span>
+                            <span className="text-violet-400 font-bold group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                              <span>Explore</span>
+                              <ArrowRight className="w-3.5 h-3.5" />
+                            </span>
+                          </div>
+                        </motion.div>
+                      </MotionStaggerItem>
+                    ))}
+                  </MotionStaggerContainer>
                 </div>
-              </div>
-            </section>
+              </section>
 
-            {/* 3. Trust Statement */}
-            <TrustStatement />
+              {/* 3. Trust Statement */}
+              <MotionReveal>
+                <TrustStatement />
+              </MotionReveal>
 
-            {/* 4. What We Build */}
-            <WhatWeBuild
-              onOpenSolutionBuilder={() => handleOpenSolutionBuilder()}
-              onNavigateToContact={handleNavigateToContact}
-              onNavigateToAiSolutions={() => navigateToRoute('ai-solutions', '#ai-solutions')}
-            />
+              {/* 4. What We Build */}
+              <MotionReveal>
+                <WhatWeBuild
+                  onOpenSolutionBuilder={() => handleOpenSolutionBuilder()}
+                  onNavigateToContact={handleNavigateToContact}
+                  onNavigateToAiSolutions={() => navigateToRoute('ai-solutions', '#ai-solutions')}
+                />
+              </MotionReveal>
 
-            {/* 5. AI Agents */}
-            <AiAgentsSection />
+              {/* 5. AI Agents */}
+              <MotionReveal>
+                <AiAgentsSection />
+              </MotionReveal>
 
-            {/* 6. AI Orchestration */}
-            <AiOrchestration />
+              {/* 6. AI Orchestration */}
+              <MotionReveal>
+                <AiOrchestration />
+              </MotionReveal>
 
-            {/* 7. Industries Matrix */}
-            <IndustryExplorer
-              onOpenSolutionBuilder={(id) => handleOpenSolutionBuilder(id)}
-              onNavigateToContact={handleNavigateToContact}
-            />
+              {/* 7. Industries Matrix */}
+              <MotionReveal>
+                <IndustryExplorer
+                  onOpenSolutionBuilder={(id) => handleOpenSolutionBuilder(id)}
+                  onNavigateToContact={handleNavigateToContact}
+                />
+              </MotionReveal>
 
-            {/* 8. Solutions by Business Function */}
-            <SolutionsByFunction
-              onOpenSolutionBuilder={() => handleOpenSolutionBuilder()}
-              onNavigateToContact={handleNavigateToContact}
-            />
+              {/* 8. Solutions by Business Function */}
+              <MotionReveal>
+                <SolutionsByFunction
+                  onOpenSolutionBuilder={() => handleOpenSolutionBuilder()}
+                  onNavigateToContact={handleNavigateToContact}
+                />
+              </MotionReveal>
 
-            {/* 9. The Artify Difference */}
-            <ArtifyDifference />
+              {/* 9. The Artify Difference */}
+              <MotionReveal>
+                <ArtifyDifference />
+              </MotionReveal>
 
-            {/* 10. Development Methodology */}
-            <DevelopmentMethodology onNavigateToContact={handleNavigateToContact} />
+              {/* 10. Development Methodology */}
+              <MotionReveal>
+                <DevelopmentMethodology onNavigateToContact={handleNavigateToContact} />
+              </MotionReveal>
 
-            {/* 11. Before / After Comparison */}
-            <BeforeAfterSlider />
+              {/* 11. Before / After Comparison */}
+              <MotionReveal>
+                <BeforeAfterSlider />
+              </MotionReveal>
 
-            {/* 12. AI Command Center */}
-            <AiCommandCenter />
+              {/* 12. AI Command Center */}
+              <MotionReveal>
+                <AiCommandCenter />
+              </MotionReveal>
 
-            {/* 13. Integrations Ecosystem */}
-            <IntegrationsEcosystem />
+              {/* 13. Integrations Ecosystem */}
+              <MotionReveal>
+                <IntegrationsEcosystem />
+              </MotionReveal>
 
-            {/* 14. Security & Governance */}
-            <SecurityAndGovernance />
+              {/* 14. Security & Governance */}
+              <MotionReveal>
+                <SecurityAndGovernance />
+              </MotionReveal>
 
-            {/* 15. Human + AI Collaboration */}
-            <HumanPlusAi />
+              {/* 15. Human + AI Collaboration */}
+              <MotionReveal>
+                <HumanPlusAi />
+              </MotionReveal>
 
-            {/* 16. Customization Showcase */}
-            <CustomizationShowcase />
+              {/* 16. Customization Showcase */}
+              <MotionReveal>
+                <CustomizationShowcase />
+              </MotionReveal>
 
-            {/* 17. Case Studies */}
-            <CaseStudiesSection
-              onOpenSolutionBuilder={() => handleOpenSolutionBuilder()}
-              onNavigateToContact={handleNavigateToContact}
-            />
+              {/* 17. Case Studies */}
+              <MotionReveal>
+                <CaseStudiesSection
+                  onOpenSolutionBuilder={() => handleOpenSolutionBuilder()}
+                  onNavigateToContact={handleNavigateToContact}
+                />
+              </MotionReveal>
 
-            {/* 18. Technology Stack */}
-            <TechnologyStack />
+              {/* 18. Technology Stack */}
+              <MotionReveal>
+                <TechnologyStack />
+              </MotionReveal>
 
-            {/* 19. Blog Preview */}
-            <BlogPreviewSection
-              onNavigateToBlog={() => navigateToRoute('blog', '#blog')}
-            />
+              {/* 19. Blog Preview */}
+              <MotionReveal>
+                <BlogPreviewSection
+                  onNavigateToBlog={() => navigateToRoute('blog', '#blog')}
+                />
+              </MotionReveal>
 
-            {/* 20. About & Vision */}
-            <AboutAndVision onNavigateToContact={handleNavigateToContact} />
+              {/* 20. About & Vision */}
+              <MotionReveal>
+                <AboutAndVision onNavigateToContact={handleNavigateToContact} />
+              </MotionReveal>
 
-            {/* 21. Contact & Brief */}
-            <ContactAndBrief prefilledBrief={prefilledBrief} />
-          </>
-        )}
+              {/* 21. Contact & Brief */}
+              <MotionReveal>
+                <ContactAndBrief prefilledBrief={prefilledBrief} />
+              </MotionReveal>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </main>
 
       {/* Global Footer */}
@@ -554,60 +694,69 @@ function MainAppContent() {
         }}
         onMouseLeave={() => setIsHoveringLauncher(false)}
       >
-        {isHoveringLauncher && !isConsultantOpen && (
-          <div
-            onClick={() => setIsConsultantOpen(true)}
-            className="absolute bottom-full right-0 mb-3.5 w-80 sm:w-[340px] p-4 rounded-2xl bg-[#0c0c14]/95 border border-violet-500/30 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.85),0_0_25px_rgba(139,92,246,0.2)] text-left cursor-pointer transition-all duration-300 animate-in fade-in zoom-in-95 slide-in-from-bottom-2 z-50 group/card"
-          >
-            <div className="flex items-center justify-between pb-2.5 mb-2.5 border-b border-white/[0.08]">
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-lg bg-violet-600/30 border border-violet-400/40 flex items-center justify-center text-violet-300">
-                  <Bot className="w-3.5 h-3.5" />
+        <AnimatePresence>
+          {isHoveringLauncher && !isConsultantOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: 12, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 10, scale: 0.96 }}
+              transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              onClick={() => setIsConsultantOpen(true)}
+              className="absolute bottom-full right-0 mb-3.5 w-80 sm:w-[340px] p-4 rounded-2xl bg-[#0c0c14]/95 border border-violet-500/30 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.85),0_0_25px_rgba(139,92,246,0.2)] text-left cursor-pointer z-50 group/card"
+            >
+              <div className="flex items-center justify-between pb-2.5 mb-2.5 border-b border-white/[0.08]">
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-lg bg-violet-600/30 border border-violet-400/40 flex items-center justify-center text-violet-300">
+                    <Bot className="w-3.5 h-3.5" />
+                  </div>
+                  <span className="text-xs font-bold text-white font-display">Artify AI Advisor</span>
                 </div>
-                <span className="text-xs font-bold text-white font-display">Artify AI Advisor</span>
+                <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-medium text-emerald-400">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>{consultantMessages.length > 1 ? 'Active Session' : 'Ready'}</span>
+                </div>
               </div>
-              <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-medium text-emerald-400">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span>{consultantMessages.length > 1 ? 'Active Session' : 'Ready'}</span>
+
+              <div className="space-y-2 mb-3">
+                {consultantMessages.length > 1 ? (
+                  <>
+                    <div className="text-[10px] uppercase font-mono-code tracking-wider text-violet-300/90 flex items-center gap-1">
+                      <MessageSquare className="w-3 h-3 text-violet-400" />
+                      <span>Latest AI Blueprint Response</span>
+                    </div>
+                    <p className="text-xs text-zinc-300 font-normal line-clamp-3 leading-relaxed">
+                      {[...consultantMessages].reverse().find((m) => m.role === 'assistant')?.content ||
+                        consultantMessages[0].content}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-xs text-zinc-200 font-medium leading-relaxed">
+                      Describe your business workflow to synthesize a custom AI-native architecture in seconds.
+                    </p>
+                    <div className="inline-flex items-center gap-1.5 text-[11px] text-violet-300 bg-violet-950/40 border border-violet-700/30 px-2.5 py-1 rounded-lg font-mono-code w-full">
+                      <Sparkles className="w-3.5 h-3.5 text-violet-400 shrink-0" />
+                      <span className="truncate">"Automate multi-entity reconciliation"</span>
+                    </div>
+                  </>
+                )}
               </div>
-            </div>
 
-            <div className="space-y-2 mb-3">
-              {consultantMessages.length > 1 ? (
-                <>
-                  <div className="text-[10px] uppercase font-mono-code tracking-wider text-violet-300/90 flex items-center gap-1">
-                    <MessageSquare className="w-3 h-3 text-violet-400" />
-                    <span>Latest AI Blueprint Response</span>
-                  </div>
-                  <p className="text-xs text-zinc-300 font-normal line-clamp-3 leading-relaxed">
-                    {[...consultantMessages].reverse().find((m) => m.role === 'assistant')?.content ||
-                      consultantMessages[0].content}
-                  </p>
-                </>
-              ) : (
-                <>
-                  <p className="text-xs text-zinc-200 font-medium leading-relaxed">
-                    Describe your business workflow to synthesize a custom AI-native architecture in seconds.
-                  </p>
-                  <div className="inline-flex items-center gap-1.5 text-[11px] text-violet-300 bg-violet-950/40 border border-violet-700/30 px-2.5 py-1 rounded-lg font-mono-code w-full">
-                    <Sparkles className="w-3.5 h-3.5 text-violet-400 shrink-0" />
-                    <span className="truncate">"Automate multi-entity reconciliation"</span>
-                  </div>
-                </>
-              )}
-            </div>
+              <div className="flex items-center justify-between pt-2 border-t border-white/[0.06] text-[11px] font-medium text-violet-300 group-hover/card:text-violet-200">
+                <span>{consultantMessages.length > 1 ? 'Resume conversation' : 'Launch interactive demo'}</span>
+                <ArrowRight className="w-3.5 h-3.5 transform transition-transform group-hover/card:translate-x-1" />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-            <div className="flex items-center justify-between pt-2 border-t border-white/[0.06] text-[11px] font-medium text-violet-300 group-hover/card:text-violet-200">
-              <span>{consultantMessages.length > 1 ? 'Resume conversation' : 'Launch interactive demo'}</span>
-              <ArrowRight className="w-3.5 h-3.5 transform transition-transform group-hover/card:translate-x-1" />
-            </div>
-          </div>
-        )}
-
-        <button
+        <motion.button
+          whileHover={{ scale: 1.04 }}
+          whileTap={{ scale: 0.96 }}
+          transition={{ duration: 0.18 }}
           onClick={() => setIsConsultantOpen(true)}
           id="floating-ai-demo-btn"
-          className="group flex items-center gap-2.5 hover:gap-3 px-4 hover:px-5 py-3 rounded-full bg-[#111118]/90 hover:bg-[#181824] border border-violet-500/40 text-white shadow-2xl backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:border-violet-400"
+          className="group flex items-center gap-2.5 hover:gap-3 px-4 hover:px-5 py-3 rounded-full bg-[#111118]/90 hover:bg-[#181824] border border-violet-500/40 text-white shadow-2xl backdrop-blur-xl transition-all duration-300 hover:border-violet-400"
           title="Open Artify AI Demo"
         >
           <div className="w-7 h-7 rounded-full bg-violet-600 flex items-center justify-center text-white shadow-md shadow-violet-600/40 shrink-0 transition-transform duration-300 group-hover:scale-110">
@@ -617,7 +766,7 @@ function MainAppContent() {
             Test AI Demo
           </span>
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse -ml-0.5 shrink-0" />
-        </button>
+        </motion.button>
       </div>
     </div>
   );

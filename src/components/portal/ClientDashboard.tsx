@@ -264,12 +264,24 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
 
           <div className="flex flex-wrap items-center gap-3 shrink-0">
             <button
-              onClick={() => onNavigateTab('ai-coworkers')}
-              id="dashboard-ai-coworkers-btn"
+              onClick={() => onNavigateTab('project-status')}
+              id="dashboard-project-status-metrics-btn"
               className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all hover:scale-[1.02] border ${
                 isLight
                   ? 'bg-violet-50 hover:bg-violet-100/80 border-violet-200 text-violet-900 shadow-sm'
                   : 'bg-violet-950/40 hover:bg-violet-950/70 border-violet-500/30 text-violet-300'
+              }`}
+            >
+              <Activity className="w-3.5 h-3.5 text-violet-500" />
+              <span>Project Status & Metrics</span>
+            </button>
+            <button
+              onClick={() => onNavigateTab('ai-coworkers')}
+              id="dashboard-ai-coworkers-btn"
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all hover:scale-[1.02] border ${
+                isLight
+                  ? 'bg-white hover:bg-slate-50 border-slate-200 text-slate-800 shadow-sm'
+                  : 'bg-white/[0.06] hover:bg-white/[0.12] border-white/[0.1] text-zinc-200 hover:text-white'
               }`}
             >
               <Bot className="w-3.5 h-3.5 text-violet-400" />
@@ -629,15 +641,30 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
                 {filteredProjects.length} Managed
               </span>
             </div>
-            <button
-              onClick={onOpenDeployModal}
-              className={`text-xs font-semibold flex items-center gap-1 transition-colors ${
-                isLight ? 'text-violet-700 hover:text-violet-900' : 'text-violet-400 hover:text-violet-300'
-              }`}
-            >
-              <Plus className="w-3.5 h-3.5" />
-              <span>Request New AI Pipeline</span>
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => onNavigateTab('project-status')}
+                id="active-projects-status-metrics-link"
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
+                  isLight
+                    ? 'bg-violet-50 hover:bg-violet-100 border-violet-200 text-violet-800'
+                    : 'bg-violet-950/40 hover:bg-violet-900/60 border-violet-500/30 text-violet-300'
+                }`}
+              >
+                <Activity className="w-3.5 h-3.5 text-violet-500" />
+                <span>Live Metrics Dashboard</span>
+                <ArrowUpRight className="w-3 h-3" />
+              </button>
+              <button
+                onClick={onOpenDeployModal}
+                className={`text-xs font-semibold flex items-center gap-1 transition-colors ${
+                  isLight ? 'text-violet-700 hover:text-violet-900' : 'text-violet-400 hover:text-violet-300'
+                }`}
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>Request New AI Pipeline</span>
+              </button>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
@@ -749,18 +776,28 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
                     ))}
                   </div>
 
-                  <button
-                    onClick={() => setSelectedProject(project)}
-                    id={`view-project-${project.id}-btn`}
-                    className={`w-full py-2 px-3 rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-1.5 border ${
-                      isLight
-                        ? 'bg-violet-50 hover:bg-violet-100 border-violet-200 text-violet-700 hover:text-violet-900 font-semibold'
-                        : 'bg-violet-950/40 hover:bg-violet-900/60 border-violet-500/30 text-violet-300 hover:text-white'
-                    }`}
-                  >
-                    <span>View Architecture & Milestones</span>
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </button>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      onClick={() => setSelectedProject(project)}
+                      id={`view-project-${project.id}-btn`}
+                      className={`py-2 px-2.5 rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-1 border ${
+                        isLight
+                          ? 'bg-slate-100 hover:bg-slate-200 border-slate-200 text-slate-800'
+                          : 'bg-white/[0.04] hover:bg-white/[0.08] border-white/[0.08] text-zinc-300'
+                      }`}
+                    >
+                      <span>Architecture</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => onNavigateTab('project-status')}
+                      id={`view-metrics-${project.id}-btn`}
+                      className="py-2 px-2.5 rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-1 bg-violet-600 hover:bg-violet-500 text-white shadow-sm"
+                    >
+                      <Activity className="w-3.5 h-3.5" />
+                      <span>Live Metrics</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}

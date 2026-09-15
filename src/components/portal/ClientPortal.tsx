@@ -9,8 +9,10 @@ import { PortalApiKeys } from './PortalApiKeys';
 import { PortalSettings } from './PortalSettings';
 import { PortalSeoHealth } from './PortalSeoHealth';
 import { PortalAiCoworkers } from './PortalAiCoworkers';
+import { ProjectStatusDashboard } from './ProjectStatusDashboard';
 import {
   LayoutDashboard,
+  Activity,
   CreditCard,
   Layers,
   Receipt,
@@ -85,6 +87,7 @@ export const ClientPortal: React.FC<ClientPortalProps> = ({
 
   const tabs = [
     { id: 'overview', label: 'Client Dashboard', icon: LayoutDashboard, badge: null },
+    { id: 'project-status', label: 'Project Status Dashboard', icon: Activity, badge: 'Live Metrics' },
     { id: 'ai-coworkers', label: 'AI Coworker Fleet', icon: Bot, badge: 'Active' },
     { id: 'seo', label: 'SEO Health & SERP', icon: TrendingUp, badge: '94/100' },
     { id: 'subscriptions', label: 'Subscriptions & Billing', icon: CreditCard, badge: user.subscription.planId.toUpperCase() },
@@ -386,6 +389,13 @@ export const ClientPortal: React.FC<ClientPortalProps> = ({
               onNavigateTab={setPortalActiveTab}
               onOpenDeployModal={() => setIsDeployModalOpen(true)}
               theme={theme}
+            />
+          )}
+
+          {portalActiveTab === 'project-status' && (
+            <ProjectStatusDashboard
+              theme={theme}
+              onNavigateTab={setPortalActiveTab}
             />
           )}
 
