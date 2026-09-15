@@ -42,7 +42,7 @@ export const Footer: React.FC<FooterProps> = ({
   onSelectProduct,
   onOpenSitemap,
 }) => {
-  const { user, openPortal, openAuthModal } = useAuth();
+  const { user, openPortal, openAuthModal, openSuperAdmin } = useAuth();
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -274,6 +274,14 @@ export const Footer: React.FC<FooterProps> = ({
               <div className="text-zinc-400">
                 Isolation: <span className="text-violet-400 font-bold">SOC2 VPC</span>
               </div>
+              <button
+                onClick={() => openSuperAdmin()}
+                className="w-full mt-2 py-1 px-2 rounded-lg bg-violet-950/40 border border-violet-700/40 text-violet-300 hover:text-white hover:bg-violet-900/60 font-semibold text-[10px] flex items-center justify-between transition-colors"
+                title="Open Artify Super Admin Governance"
+              >
+                <span>Control Center</span>
+                <span className="text-[9px] bg-violet-600 text-white px-1.5 py-0.5 rounded font-bold font-mono-code">Admin</span>
+              </button>
             </div>
           </div>
         </div>

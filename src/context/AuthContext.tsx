@@ -7,7 +7,7 @@ interface AuthContextType {
   user: UserProfile | null;
   isAuthenticated: boolean;
   login: (email: string, password?: string, demoKey?: string) => Promise<boolean>;
-  loginAsDemo: (type: 'enterprise' | 'growth' | 'editor') => void;
+  loginAsDemo: (type: 'enterprise' | 'growth' | 'editor' | 'superadmin') => void;
   register: (data: { name: string; email: string; company: string; role: string; planId?: 'starter' | 'growth' | 'enterprise' }) => Promise<boolean>;
   logout: () => void;
   
@@ -22,6 +22,11 @@ interface AuthContextType {
   openPortal: (tab?: string) => void;
   closePortal: () => void;
   setPortalActiveTab: (tab: string) => void;
+
+  // Super Admin Control Center State
+  isSuperAdminOpen: boolean;
+  openSuperAdmin: () => void;
+  closeSuperAdmin: () => void;
 
   // Subscription Management
   updateSubscriptionPlan: (planId: 'starter' | 'growth' | 'enterprise', cycle: 'monthly' | 'annual') => void;
@@ -66,6 +71,27 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [authModalMode, setAuthModalMode] = useState<'login' | 'signup'>('login');
   const [isPortalOpen, setIsPortalOpen] = useState(false);
   const [portalActiveTab, setPortalActiveTab] = useState<string>('overview');
+  const [isSuperAdminOpen, setIsSuperAdminOpen] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.location.hash === '#super-admin';
+    }
+    return false;
+  });
+
+  // Sync hash with super admin view
+  useEffect(() => {
+    const checkHash = () => {
+      if (typeof window !== 'undefined') {
+        if (window.location.hash === '#super-admin') {
+          setIsSuperAdminOpen(true);
+          setIsPortalOpen(false);
+        }
+      }
+    };
+    checkHash();
+    window.addEventListener('hashchange', checkHash);
+    return () => window.removeEventListener('hashchange', checkHash);
+  }, []);
 
   // Sync to localStorage
   useEffect(() => {
@@ -87,6 +113,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const openPortal = (tab: string = 'overview') => {
     setPortalActiveTab(tab);
+    setIsSuperAdminOpen(false);
     setIsPortalOpen(true);
     // Scroll to top when opening portal
     if (typeof window !== 'undefined') {
@@ -98,11 +125,31 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setIsPortalOpen(false);
   };
 
-  const loginAsDemo = (type: 'enterprise' | 'growth' | 'editor') => {
+  const openSuperAdmin = () => {
+    setIsPortalOpen(false);
+    setIsSuperAdminOpen(true);
+    if (typeof window !== 'undefined') {
+      window.location.hash = '#super-admin';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const closeSuperAdmin = () => {
+    setIsSuperAdminOpen(false);
+    if (typeof window !== 'undefined' && window.location.hash === '#super-admin') {
+      window.location.hash = '';
+    }
+  };
+
+  const loginAsDemo = (type: 'enterprise' | 'growth' | 'editor' | 'superadmin') => {
     const demo = DEMO_USERS[type] || DEMO_USERS.enterprise;
     setUser(demo);
     setIsAuthModalOpen(false);
-    openPortal('overview');
+    if (type === 'superadmin') {
+      openSuperAdmin();
+    } else {
+      openPortal('overview');
+    }
   };
 
   const login = async (email: string, _password?: string, demoKey?: string): Promise<boolean> => {
@@ -457,6 +504,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const logout = () => {
     setUser(null);
     setIsPortalOpen(false);
+    setIsSuperAdminOpen(false);
+    if (typeof window !== 'undefined' && window.location.hash === '#super-admin') {
+      window.location.hash = '';
+    }
   };
 
   const updateSubscriptionPlan = (planId: 'starter' | 'growth' | 'enterprise', cycle: 'monthly' | 'annual') => {
@@ -717,6 +768,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         openPortal,
         closePortal,
         setPortalActiveTab,
+        isSuperAdminOpen,
+        openSuperAdmin,
+        closeSuperAdmin,
         updateSubscriptionPlan,
         toggleAddon,
         toggleAutoRenew,

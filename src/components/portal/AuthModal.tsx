@@ -207,7 +207,34 @@ export const AuthModal: React.FC<{ theme?: 'dark' | 'light' }> = ({ theme: propT
               </span>
               <span className={`text-[10px] ${isLight ? 'text-slate-500' : 'text-zinc-400'}`}>Pre-configured accounts</span>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <button
+                type="button"
+                onClick={() => loginAsDemo('superadmin')}
+                id="demo-login-superadmin-btn"
+                className={`flex items-center gap-2 p-2 rounded-lg border text-left transition-all group col-span-2 sm:col-span-1 ${
+                  isLight
+                    ? 'bg-amber-50/70 hover:bg-amber-100/80 border-amber-300 shadow-sm'
+                    : 'bg-amber-950/20 hover:bg-amber-900/30 border-amber-500/40 text-amber-300'
+                }`}
+              >
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0 group-hover:scale-105 transition-transform ${
+                  isLight
+                    ? 'bg-amber-200 text-amber-900 border border-amber-400'
+                    : 'bg-amber-600/30 border border-amber-400/50 text-amber-300'
+                }`}>
+                  ⚡
+                </div>
+                <div className="min-w-0">
+                  <div className={`text-xs font-bold truncate ${
+                    isLight ? 'text-amber-950 group-hover:text-amber-900' : 'text-amber-200 group-hover:text-amber-100'
+                  }`}>
+                    Super Admin
+                  </div>
+                  <div className={`text-[9px] truncate ${isLight ? 'text-amber-700 font-semibold' : 'text-amber-400'}`}>Full Control</div>
+                </div>
+              </button>
+
               <button
                 type="button"
                 onClick={() => loginAsDemo('enterprise')}
@@ -229,7 +256,7 @@ export const AuthModal: React.FC<{ theme?: 'dark' | 'light' }> = ({ theme: propT
                   <div className={`text-xs font-semibold truncate ${
                     isLight ? 'text-slate-900 group-hover:text-violet-900' : 'text-white group-hover:text-violet-200'
                   }`}>
-                    Sarah (Admin)
+                    Sarah (Client)
                   </div>
                   <div className={`text-[9px] truncate ${isLight ? 'text-slate-500' : 'text-zinc-400'}`}>Apex Logistics</div>
                 </div>

@@ -25,8 +25,10 @@ import { Footer } from './components/Footer';
 import { InteractiveAiConsultant } from './components/InteractiveAiConsultant';
 import { SolutionBuilderWizard } from './components/SolutionBuilderWizard';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { AdminProvider } from './context/AdminContext';
 import { AuthModal } from './components/portal/AuthModal';
 import { ClientPortal } from './components/portal/ClientPortal';
+import { SuperAdminLayout } from './components/admin/SuperAdminLayout';
 import { QuickAccessWidget } from './components/portal/QuickAccessWidget';
 import { BlogPage } from './components/blog/BlogPage';
 import { BlogPreviewSection } from './components/BlogPreviewSection';
@@ -78,7 +80,7 @@ function MainAppContent() {
     return AI_PRODUCTS[0].slug;
   });
 
-  const { isPortalOpen, isAuthModalOpen } = useAuth();
+  const { isPortalOpen, isAuthModalOpen, isSuperAdminOpen } = useAuth();
 
   // Listen to hash changes for browser forward/back buttons
   useEffect(() => {
@@ -232,6 +234,18 @@ function MainAppContent() {
     setPrefilledBrief(brief);
     handleNavigateToContact();
   };
+
+  // If Super Admin Control Center is open, display the Control Center
+  if (isSuperAdminOpen) {
+    return (
+      <div className={theme === 'light' ? 'theme-light' : 'theme-dark'}>
+        <AdminProvider>
+          <SuperAdminLayout theme={theme} onToggleTheme={handleToggleTheme} />
+        </AdminProvider>
+        {isAuthModalOpen && <AuthModal theme={theme} />}
+      </div>
+    );
+  }
 
   // If Client Portal is open, display the Client Portal
   if (isPortalOpen) {
